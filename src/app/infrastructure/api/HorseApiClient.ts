@@ -5,16 +5,11 @@ interface ApiResponse {
   data: {
     id: string;
     name: string;
-    sex: '牡' | '牝' | 'セン';
-    sire: string;
-    dam: string;
-    bms: string;
-    owner: string;
-    breeder: string;
-    prize: string;
-    trainer?: string;
-    birthyear?: string;
+    sex: string;
     image: string;
+    father: string;
+    grandfather: string;
+    title: string;
   }[];
 }
 
@@ -22,7 +17,7 @@ export class HorseApiClient implements IHorseRepository {
   private readonly baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   async searchHorses(keyword: string): Promise<Horse[]> {
-    const response = await fetch(`${this.baseUrl}/api/horses?word=${encodeURIComponent(keyword)}`);
+    const response = await fetch(`${this.baseUrl}/api/v2/horses?word=${encodeURIComponent(keyword)}`);
     
     if (!response.ok) throw new Error('API request failed');
     
@@ -31,20 +26,16 @@ export class HorseApiClient implements IHorseRepository {
   }
 
   private transformItem(item: ApiResponse['data'][number]): Horse {
+    console.log(item);
     return {
       id: item.id,
       name: item.name,
-      gender: item.sex,
-      sire: item.sire,
-      dam: item.dam,
-      damSire: item.bms,
-      owner: item.owner,
-      breeder: item.breeder,
-      totalPrizeMoney: parseFloat(item.prize.replace(/,/g, '')) * 10000,
-      trainer: item.trainer,
-      birthyear: item.birthyear,
+      sex: item.sex,
       image: item.image,
-      detailUrl: `https://db.netkeiba.com${item.id}`, // IDを基にURLを生成
+      father: item.father,
+      grandfather: item.grandfather,
+      title: item.title,
+      detailUrl: `https://db.netkeiba.com/horse/${item.id}`, // IDを基にURLを生成
     };
   }
 }
