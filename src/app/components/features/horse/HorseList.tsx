@@ -33,10 +33,10 @@ export default function HorseList({ horses }: Props) {
           </div>
           <h3 className="text-xl font-bold">{horse.name}</h3>
           <div className="mt-2 space-y-2">
-            <p>性別: {horse.gender}</p>
-            <p>父: {horse.sire}</p>
-            <p>母父: {horse.damSire}</p>
-            <p>賞金: {horse.totalPrizeMoney.toLocaleString()}円</p>
+            <p>性別: {horse.sex}</p>
+            <p>父: {horse.father}</p>
+            <p>母父: {horse.grandfather}</p>
+            <p>主な勝鞍: {horse.title}</p>
           </div>
         </div>
       ))}
