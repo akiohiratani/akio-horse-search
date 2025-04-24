@@ -1,17 +1,6 @@
 import { IHorseRepository } from "@/app/domain/repositories/IHorseRepository";
 import { Horse } from "@/app/domain/models/Horse";
-
-interface ApiResponse {
-  data: {
-    id: string;
-    name: string;
-    sex: string;
-    image: string;
-    father: string;
-    grandfather: string;
-    title: string;
-  }[];
-}
+import { HorseData as HorseResponseData } from "./data/HorseData";
 
 export class HorseApiClient implements IHorseRepository {
   private readonly baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -21,11 +10,11 @@ export class HorseApiClient implements IHorseRepository {
     
     if (!response.ok) throw new Error('API request failed');
     
-    const { data } = await response.json() as ApiResponse;
+    const { data } = await response.json() as HorseResponseData;
     return data.map(item => this.transformItem(item));
   }
 
-  private transformItem(item: ApiResponse['data'][number]): Horse {
+  private transformItem(item: HorseResponseData['data'][number]): Horse {
     console.log(item);
     return {
       id: item.id,
