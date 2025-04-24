@@ -1,5 +1,6 @@
 import { Horse } from '../models/Horse';
 
 export interface IHorseRepository {
-  searchHorses(keyword: string): Promise<Horse[]>;
+  searchHorsesByHorseName(keyword: string): Promise<Horse[]>;
+  searchHorsesByRace(raceId: string): Promise<Horse[]>;
 }

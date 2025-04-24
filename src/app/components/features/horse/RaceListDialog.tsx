@@ -3,13 +3,16 @@ import React, { useEffect, useState } from 'react';
 import { Race } from '@/app/domain/models/Race';
 import { RaceApiClient } from '@/app/infrastructure/api/RaceApiClient';
 import { SearchRacesUseCase } from '@/app/application/usecases/SearchRacesUseCase';
+import { SearchType } from './type/SearchType';
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
+  onSearch: (keyword: SearchType) => void;
+  handleDialog: (value:boolean) => void;
 };
 
-export const RaceListDialog = ({ isOpen, onClose }:Props) => {
+export const RaceListDialog = ({ isOpen, onClose, onSearch, handleDialog }:Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [races, setRaces] = useState<Race[]>([]);
 
@@ -38,8 +41,12 @@ export const RaceListDialog = ({ isOpen, onClose }:Props) => {
   if (!isOpen) return null;
 
   const handleRaceClick = (raceId: string) => {
-    // 今後ここで馬データ取得処理を実装
-    console.log(`レースID: ${raceId} がクリックされました`);
+    onSearch({
+      "type":"raceId",
+      "value":raceId
+    });
+
+    handleDialog(false);
   };
 
   return (
