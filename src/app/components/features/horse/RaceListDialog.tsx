@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
 type Race = {
-  id: number;
-  name: string;
+  id: string;      // レースのID
+  name: string;    // レース名
+  place: string;   // 開催場所
+  date: string;    // 開催日
+  distance: string;// 距離
 };
 
 type Props = {
@@ -11,14 +14,34 @@ type Props = {
 };
 
 const mockRaces: Race[] = [
-  { id: 1, name: '有馬記念' },
-  { id: 2, name: '天皇賞（春）' },
-  { id: 3, name: '天皇賞（秋）' },
-  { id: 4, name: '日本ダービー' },
-  { id: 5, name: '菊花賞' },
-  { id: 6, name: '桜花賞' },
-  { id: 7, name: '宝塚記念' },
-  { id: 8, name: '安田記念' },
+  {
+    id: 'arima',
+    name: '有馬記念',
+    place: '中山',
+    date: '2024-12-22',
+    distance: '2500m',
+  },
+  {
+    id: 'tenno_spring',
+    name: '天皇賞（春）',
+    place: '京都',
+    date: '2024-04-28',
+    distance: '3200m',
+  },
+  {
+    id: 'derby',
+    name: '日本ダービー',
+    place: '東京',
+    date: '2024-05-26',
+    distance: '2400m',
+  },
+  {
+    id: 'kikka',
+    name: '菊花賞',
+    place: '京都',
+    date: '2024-10-20',
+    distance: '3000m',
+  }
 ];
 
 export const RaceListDialog = ({ isOpen, onClose }:Props) => {
@@ -39,7 +62,7 @@ export const RaceListDialog = ({ isOpen, onClose }:Props) => {
 
   if (!isOpen) return null;
 
-  const handleRaceClick = (raceId: number) => {
+  const handleRaceClick = (raceId: string) => {
     // 今後ここで馬データ取得処理を実装
     console.log(`レースID: ${raceId} がクリックされました`);
   };
@@ -54,11 +77,11 @@ export const RaceListDialog = ({ isOpen, onClose }:Props) => {
       }}
     >
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 overflow-hidden flex flex-col">
-        {/* ヘッダー（透明感のあるモダンな色） */}
+        {/* ヘッダー */}
         <div
-          className="flex justify-center items-center p-4 border-b"
+          className="flex justify-center items-center p-4"
           style={{
-            backgroundColor: 'rgba(240, 248, 255, 0.8)', // 透明感のある淡いブルー（AliceBlueに近い）
+            backgroundColor: 'rgba(128, 151, 228, 0.85)',
             backdropFilter: 'saturate(180%) blur(10px)',
             WebkitBackdropFilter: 'saturate(180%) blur(10px)',
           }}
@@ -75,23 +98,35 @@ export const RaceListDialog = ({ isOpen, onClose }:Props) => {
               <p className="text-sm text-gray-500 mt-2">（10秒間お待ちください）</p>
             </div>
           ) : (
-            <ul className="divide-y divide-gray-200">
+            <ul className="space-y-4">
               {races.map((race) => (
-                <li key={race.id} className="py-3">
+                <li key={race.id}>
                   <button
                     type="button"
                     onClick={() => handleRaceClick(race.id)}
-                    className="w-full text-left px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors duration-200 flex items-center group"
+                    className="w-full text-left rounded-xl bg-blue-50/60 hover:bg-blue-100 transition-colors duration-200 shadow-sm px-5 py-4 flex flex-col gap-1 group border border-blue-100"
                   >
-                    <span className="text-gray-800 group-hover:text-blue-600 font-medium">{race.name}</span>
-                    <svg
-                      className="w-5 h-5 ml-auto text-gray-400 group-hover:text-blue-500 transform group-hover:translate-x-1 transition-transform"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                    <span className="text-lg font-bold text-blue-700 group-hover:text-blue-900 flex items-center">
+                      {race.name}
+                      <svg
+                        className="w-5 h-5 ml-2 text-blue-400 group-hover:text-blue-600 transform group-hover:translate-x-1 transition-transform"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </span>
+                    <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-700 mt-1">
+                      <span>場所: <span className="font-medium">{race.place}</span></span>
+                      <span>日付: <span className="font-medium">{race.date}</span></span>
+                      <span>距離: <span className="font-medium">{race.distance}</span></span>
+                    </div>
                   </button>
                 </li>
               ))}
@@ -100,7 +135,7 @@ export const RaceListDialog = ({ isOpen, onClose }:Props) => {
         </div>
 
         {/* フッター */}
-        <div className="border-t p-4 bg-gray-50">
+        <div className="p-4 bg-gray-50">
           <button
             type="button"
             onClick={onClose}
