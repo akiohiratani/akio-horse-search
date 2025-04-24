@@ -7,7 +7,7 @@ import { HorseApiClient } from './infrastructure/api/HorseApiClient';
 import { SearchHorsesUseCase } from './application/usecases/SearchHorsesUseCase';
 import SearchForm from './components/features/horse/SearchForm';
 import HorseList from './components/features/horse/HorseList';
-import SearchDialog from './components/features/horse/SearchDialog';
+import { SearchDialog } from './components/features/horse/SearchDialog';
 
 export default function HomePage() {
   const [horses, setHorses] = useState<Horse[]>([]);
@@ -34,7 +34,7 @@ export default function HomePage() {
       <h1 className="text-3xl font-bold mb-4">競走馬検索</h1>
       <SearchForm onSearch={handleSearch} />
       {loading ? (
-        <SearchDialog word="検索中..."/>
+        <SearchDialog isOpen={loading} message="検索中..."/>
       ) : (
         <HorseList horses={horses} />
       )}
