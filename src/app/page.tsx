@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import { Horse } from './domain/models/Horse';
 import { HorseApiClient } from './infrastructure/api/HorseApiClient';
-import { SearchHorsesByKeywordUseCase } from './application/usecases/SearchHorsesByKeywordUseCase';
+import { SearchHorsesByHorseNameUseCase } from './application/usecases/SearchHorsesByHorseNameUseCase';
 import SearchForm from './components/features/horse/SearchForm';
 import HorseList from './components/features/horse/HorseList';
 import { SearchDialog } from './components/features/horse/SearchDialog';
@@ -16,7 +16,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(false);
 
   const repository = new HorseApiClient();
-  const searchHorsesByHorseNameUseCase = new SearchHorsesByKeywordUseCase(repository);
+  const searchHorsesByHorseNameUseCase = new SearchHorsesByHorseNameUseCase(repository);
   const searchHorsesByRaceUseCase = new SearchHorsesByRaceUseCase(repository);
 
   const handleSearch = async (keyword: SearchType) => {
