@@ -1,62 +1,37 @@
 import React, { useEffect, useState } from 'react';
 
-type Race = {
-  id: string;      // レースのID
-  name: string;    // レース名
-  place: string;   // 開催場所
-  date: string;    // 開催日
-  distance: string;// 距離
-};
+import { Race } from '@/app/domain/models/Race';
+import { RaceApiClient } from '@/app/infrastructure/api/RaceApiClient';
+import { SearchRacesUseCase } from '@/app/application/usecases/SearchRacesUseCase';
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
 };
 
-const mockRaces: Race[] = [
-  {
-    id: 'arima',
-    name: '有馬記念',
-    place: '中山',
-    date: '2024-12-22',
-    distance: '2500m',
-  },
-  {
-    id: 'tenno_spring',
-    name: '天皇賞（春）',
-    place: '京都',
-    date: '2024-04-28',
-    distance: '3200m',
-  },
-  {
-    id: 'derby',
-    name: '日本ダービー',
-    place: '東京',
-    date: '2024-05-26',
-    distance: '2400m',
-  },
-  {
-    id: 'kikka',
-    name: '菊花賞',
-    place: '京都',
-    date: '2024-10-20',
-    distance: '3000m',
-  }
-];
-
 export const RaceListDialog = ({ isOpen, onClose }:Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [races, setRaces] = useState<Race[]>([]);
 
+  const raceRepository = new RaceApiClient();
+  const searchRacesUseCase = new SearchRacesUseCase(raceRepository);
+  
   useEffect(() => {
     if (isOpen) {
-      setIsLoading(true);
-      setRaces([]);
-      const timer = setTimeout(() => {
-        setRaces(mockRaces);
-        setIsLoading(false);
-      }, 10000);
-      return () => clearTimeout(timer);
+      const searchRace = async () =>{
+        try{
+          setIsLoading(true);
+          setRaces([]);
+          const races = await searchRacesUseCase.execute();
+          setRaces(races);
+        }catch(error){
+          console.error('検索エラー', error);
+          alert('レース取得に失敗しました。')
+        }finally{
+          setIsLoading(false);
+        }
+      }
+      searchRace();
     }
   }, [isOpen]);
 
@@ -95,7 +70,7 @@ export const RaceListDialog = ({ isOpen, onClose }:Props) => {
             <div className="flex flex-col items-center justify-center py-8">
               <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
               <p className="mt-4 text-gray-600">レース情報を読み込み中...</p>
-              <p className="text-sm text-gray-500 mt-2">（10秒間お待ちください）</p>
+              <p className="text-sm text-gray-500 mt-2">（お待ちください）</p>
             </div>
           ) : (
             <ul className="space-y-4">
