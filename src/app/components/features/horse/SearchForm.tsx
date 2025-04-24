@@ -25,7 +25,7 @@ export default function SearchForm({ onSearch }: Props) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex items-center justify-center gap-3 bg-gray-100 p-4 rounded-2xl shadow max-w-xl mx-auto"
+      className="flex items-center justify-center gap-3 bg-gray-100 p-4 rounded-2xl shadow mx-auto"
     >
       <input
         type="text"
