@@ -12,6 +12,10 @@ export default function SearchForm({ onSearch }: Props) {
   const [horseName, setHorseName] = useState('');
   const [isRaceListDialogOpen, setIsRaceListDialog] = useState(false)
 
+  const handleSetIsRaceListDialog = (value:boolean) =>{
+    setIsRaceListDialog(value);
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSearch({
@@ -53,7 +57,9 @@ export default function SearchForm({ onSearch }: Props) {
       </button>
       <RaceListDialog
         isOpen = {isRaceListDialogOpen}
-        onClose={() => setIsRaceListDialog(false)}></RaceListDialog>
+        onClose={() => setIsRaceListDialog(false)}
+        onSearch={onSearch}
+        handleDialog={handleSetIsRaceListDialog}></RaceListDialog>
     </form>
   );
 }
