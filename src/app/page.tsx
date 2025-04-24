@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import { Horse } from './domain/models/Horse';
 import { HorseApiClient } from './infrastructure/api/HorseApiClient';
-import { SearchHorsesUseCase } from './application/usecases/SearchHorsesUseCase';
+import { SearchHorsesByKeywordUseCase } from './application/usecases/SearchHorsesByKeywordUseCase';
 import SearchForm from './components/features/horse/SearchForm';
 import HorseList from './components/features/horse/HorseList';
 import { SearchDialog } from './components/features/horse/SearchDialog';
@@ -14,12 +14,12 @@ export default function HomePage() {
   const [loading, setLoading] = useState(false);
 
   const repository = new HorseApiClient();
-  const searchUseCase = new SearchHorsesUseCase(repository);
+  const searchHorsesByKeywordUseCase = new SearchHorsesByKeywordUseCase(repository);
 
   const handleSearch = async (keyword: string) => {
     setLoading(true);
     try {
-      const result = await searchUseCase.execute(keyword);
+      const result = await searchHorsesByKeywordUseCase.execute(keyword);
       setHorses(result);
     } catch (error) {
       console.error('検索エラー:', error);

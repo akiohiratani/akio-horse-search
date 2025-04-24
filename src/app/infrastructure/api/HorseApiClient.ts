@@ -5,8 +5,17 @@ import { HorseData as HorseResponseData } from "./data/HorseData";
 export class HorseApiClient implements IHorseRepository {
   private readonly baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-  async searchHorses(keyword: string): Promise<Horse[]> {
+  async searchHorsesByKeyword(keyword: string): Promise<Horse[]> {
     const response = await fetch(`${this.baseUrl}/api/v2/horses?word=${encodeURIComponent(keyword)}`);
+    
+    if (!response.ok) throw new Error('API request failed');
+    
+    const { data } = await response.json() as HorseResponseData;
+    return data.map(item => this.transformItem(item));
+  }
+
+  async searchHorsesByRace(raceId: string): Promise<Horse[]> {
+    const response = await fetch(`${this.baseUrl}/api/v2/race?id=${encodeURIComponent(raceId)}`);
     
     if (!response.ok) throw new Error('API request failed');
     
