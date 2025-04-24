@@ -33,25 +33,25 @@ export default function SearchForm({ onSearch }: Props) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex items-center justify-center gap-3 bg-gray-100 p-4 rounded-2xl shadow mx-auto"
+      className="flex flex-col md:flex-row items-stretch md:items-center gap-2 w-full"
     >
       <input
         type="text"
         value={horseName}
         onChange={e => setHorseName(e.target.value)}
         placeholder="馬名を入力"
-        className="flex-1 px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white text-base"
+        className="border rounded px-3 py-2 flex-1"
       />
       <button
         type="submit"
-        className="px-5 py-2 rounded-full bg-blue-600 text-white text-base font-semibold hover:bg-blue-700 transition"
+        className="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600 transition"
       >
         検索
       </button>
       <button
         type="button"
         onClick={handleRaceSearch}
-        className="px-5 py-2 rounded-full border border-blue-600 text-blue-600 bg-white text-base font-semibold hover:bg-blue-50 transition"
+        className="bg-gray-300 text-gray-800 rounded px-4 py-2 hover:bg-gray-400 transition"
       >
         レースから
       </button>
