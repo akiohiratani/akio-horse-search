@@ -1,6 +1,7 @@
 import { IRaceRepository } from "@/app/domain/repositories/IRaceRepository";
 import { Race } from "@/app/domain/models/Race";
 import { RaceData as RaceResponseData } from "./data/RaceData";
+import { ErrorData } from "./data/ErrorData";
 
 export class RaceApiClient implements IRaceRepository {
   private readonly baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -8,8 +9,11 @@ export class RaceApiClient implements IRaceRepository {
   async searchRaces(): Promise<Race[]> {
     const response = await fetch(`${this.baseUrl}/api/v2/races/g_race`);
     
-    if (!response.ok) throw new Error('API request failed');
-    
+    if (!response.ok){
+      const { error } = await response.json() as ErrorData;
+      throw new Error(`status_code:${error.status_code}\n message=${error.message}`);
+    } 
+
     const { data } = await response.json() as RaceResponseData;
     return data.map(item => this.transformItem(item));
   }

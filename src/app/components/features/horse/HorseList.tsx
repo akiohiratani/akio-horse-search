@@ -8,37 +8,43 @@ type Props = {
 
 export default function HorseList({ horses }: Props) {
   if (horses.length === 0) {
-    return <div className="text-center text-gray-500">検索結果がありません</div>;
+    return <div className="text-center text-gray-500 mb-4">検索結果がありません</div>;
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-4">
       {horses.map((horse) => (
-        <div 
+        <div
           key={horse.id}
-          className="p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer hover:bg-blue-50"
-          tabIndex={0}
-          onKeyPress={(e) => {
-            if (e.key === 'Enter') window.open(horse.detailUrl, '_blank', 'noopener,noreferrer');
-          }}>
-          <div className="relative h-48 mb-4">
+          className="bg-white rounded-lg shadow-md p-4 flex flex-col items-center"
+        >
+          <a
+            onClick={() => window.open(horse.detailUrl, '_blank', 'noopener,noreferrer')}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full max-w-xs aspect-[4/3] relative group"
+          >
             <Image
               src={horse.image}
               alt={horse.name}
-              onClick={() => window.open(horse.detailUrl, '_blank', 'noopener,noreferrer')}
-              role="link"
               fill
-              className="object-cover rounded"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="object-cover rounded-md w-full h-full"
+              sizes="(max-width: 640px) 100vw, 400px"
+              priority
             />
+            <span className="absolute bottom-2 right-2 bg-black bg-opacity-60 text-white text-xs rounded px-2 py-0.5 pointer-events-none">
+              詳細
+            </span>
+          </a>
+          <div className="mt-3 w-full flex flex-col items-start">
+            <div className="font-bold text-lg">{horse.name}</div>
+            <div className="text-sm text-gray-600">性別: {horse.sex}</div>
+            <div className="text-sm text-gray-600">父: {horse.father}</div>
+            <div className="text-sm text-gray-600">母父: {horse.grandfather}</div>
+            <div className="text-sm text-gray-600">主な勝鞍: {horse.title}</div>
           </div>
-          <h3 className="text-xl font-bold">{horse.name}</h3>
-          <div className="mt-2 space-y-2">
-            <p>性別: {horse.sex}</p>
-            <p>父: {horse.father}</p>
-            <p>母父: {horse.grandfather}</p>
-            <p>主な勝鞍: {horse.title}</p>
-            <p><FavoriteButton horse={horse}/></p>
+          <div className="mt-4 self-end">
+            <FavoriteButton horse={horse} />
           </div>
         </div>
       ))}
