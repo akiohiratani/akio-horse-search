@@ -8,7 +8,7 @@ type Props = {
 
 export default function HorseList({ horses }: Props) {
   if (horses.length === 0) {
-    return <div className="text-center text-gray-500">検索結果がありません</div>;
+    return <div className="text-center text-gray-500 mb-4">検索結果がありません</div>;
   }
 
   return (

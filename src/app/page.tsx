@@ -9,6 +9,7 @@ import HorseList from './components/features/horse/HorseList';
 import { SearchDialog } from './components/features/horse/SearchDialog';
 import { SearchHorsesByRaceUseCase } from './application/usecases/SearchHorsesByRaceUseCase';
 import { SearchType } from './components/features/horse/type/SearchType';
+import { FavoriteHorseService } from './infrastructure/api/FavoriteHorseService';
 
 export default function HomePage() {
   const [horses, setHorses] = useState<Horse[]>([]);
@@ -21,12 +22,24 @@ export default function HomePage() {
   const handleSearch = async (keyword: SearchType) => {
     setLoading(true);
     try {
-      if(keyword.type == "horceName"){
-        const horseNameSeachResult = await searchHorsesByHorseNameUseCase.execute(keyword.value);
-        setHorses(horseNameSeachResult);
-      }else if(keyword.type = "raceId"){
-        const raceIdSeachResult = await searchHorsesByRaceUseCase.execute(keyword.value);
-        setHorses(raceIdSeachResult);
+      switch(keyword.type){
+        case "horceName":
+          if(keyword.value == null || keyword.value == "") return;
+          const horseNameSearchResult = await searchHorsesByHorseNameUseCase.execute(keyword.value);
+          setHorses(horseNameSearchResult);
+          break;
+        case "raceId":
+          if(keyword.value == null || keyword.value == "") return;
+          const raceIdSearchResult = await searchHorsesByRaceUseCase.execute(keyword.value);
+          setHorses(raceIdSearchResult);
+          break;
+        case "favorite":
+          const favoriteService = FavoriteHorseService.getInstance();
+          const favariteSearchResult = favoriteService.getAllFavorites();
+          setHorses(favariteSearchResult);
+          break
+        default:
+          return;
       }
     } catch (error) {
       console.error('検索エラー:', error);

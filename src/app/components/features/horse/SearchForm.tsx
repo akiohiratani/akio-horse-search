@@ -28,6 +28,14 @@ export default function SearchForm({ onSearch }: Props) {
     setIsRaceListDialog(true); // レースから取得
   };
 
+  const handleFavoriteSearch = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onSearch({
+      "type":"favorite",
+      "value":""
+    });
+  };
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -52,6 +60,13 @@ export default function SearchForm({ onSearch }: Props) {
         className="bg-gray-300 text-gray-800 rounded px-4 py-2 hover:bg-gray-400 transition"
       >
         レースから
+      </button>
+      <button
+        type="button"
+        onClick={handleFavoriteSearch}
+        className="bg-gray-300 text-gray-800 rounded px-4 py-2 hover:bg-gray-400 transition"
+      >
+        お気に入り
       </button>
       <RaceListDialog
         isOpen = {isRaceListDialogOpen}
