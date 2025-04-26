@@ -1,5 +1,3 @@
-'use client';
-
 import { useState } from 'react';
 import { RaceListDialog } from './RaceListDialog';
 import { SearchType } from './type/SearchType';
