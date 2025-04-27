@@ -2,16 +2,20 @@ import Image from 'next/image';
 import { Horse } from '@/app/domain/models/Horse';
 import { FavoriteButton } from './FavoriteButton';
 import { History } from '@/app/domain/models/History';
+import { HistoryDialog } from './HistoryDialog';
+import { useState } from 'react';
 
 type Props = {
   horses: Horse[];
 };
 
 export default function HorseList({ horses }: Props) {
+  const [isOpenHistoryDialog, setIsOpenHistoryDialog] = useState(false);
+
   if (horses.length === 0) {
     return <div className="text-center text-gray-500 mb-4">検索結果がありません</div>;
   }
-
+  
   const getLastRace = (historys: History[]) =>{
     if(historys == null || historys.length == 0){
       return "";
@@ -31,7 +35,7 @@ export default function HorseList({ horses }: Props) {
           className="bg-white rounded-lg shadow-md p-4 flex flex-col items-center"
         >
           <a
-            onClick={() => window.open(horse.detailUrl, '_blank', 'noopener,noreferrer')}
+            onClick={() => setIsOpenHistoryDialog(true)}
             target="_blank"
             rel="noopener noreferrer"
             className="block w-full max-w-xs aspect-[4/3] relative group"
@@ -58,6 +62,10 @@ export default function HorseList({ horses }: Props) {
           <div className="mt-4 self-end">
             <FavoriteButton horse={horse} />
           </div>
+          <HistoryDialog
+            open={isOpenHistoryDialog}
+            onClose={() => {setIsOpenHistoryDialog(false)}}
+            histories={horse.historys}/>
         </div>
       ))}
     </div>
