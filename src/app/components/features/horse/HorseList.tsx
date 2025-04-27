@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { Horse } from '@/app/domain/models/Horse';
 import { FavoriteButton } from './FavoriteButton';
+import { History } from '@/app/domain/models/History';
 
 type Props = {
   horses: Horse[];
@@ -10,6 +11,17 @@ export default function HorseList({ horses }: Props) {
   if (horses.length === 0) {
     return <div className="text-center text-gray-500 mb-4">検索結果がありません</div>;
   }
+
+  const getLastRace = (historys: History[]) =>{
+    if(historys == null || historys.length == 0){
+      return "";
+    }
+    const date = historys[0].date;
+    const race_name = historys[0].race_name;
+    const finish_position = historys[0].finish_position;
+
+    return `${date} ${race_name} ${finish_position}着`;
+  };
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-4">
@@ -41,7 +53,7 @@ export default function HorseList({ horses }: Props) {
             <div className="text-sm text-gray-600">性別: {horse.sex}</div>
             <div className="text-sm text-gray-600">父: {horse.father}</div>
             <div className="text-sm text-gray-600">母父: {horse.grandfather}</div>
-            <div className="text-sm text-gray-600">主な勝鞍: {horse.title}</div>
+            <div className="text-sm text-gray-600">前回レース: {getLastRace(horse.historys)}</div>
           </div>
           <div className="mt-4 self-end">
             <FavoriteButton horse={horse} />

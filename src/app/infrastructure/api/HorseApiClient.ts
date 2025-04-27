@@ -41,6 +41,7 @@ export class HorseApiClient implements IHorseRepository {
       grandfather: item.grandfather,
       title: item.title,
       detailUrl: `https://db.netkeiba.com/horse/${item.id}`, // IDを基にURLを生成
+      historys: item.race_historys
     };
   }
 }
