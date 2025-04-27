@@ -28,7 +28,7 @@ export interface HorseData {
       pace: string;
       horse_weight: string;
       winner: string;
-      remarks: string;
+      rise: string;
     }[]
   }[];
 }

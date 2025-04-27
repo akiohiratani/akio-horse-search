@@ -1,3 +1,5 @@
+import { History } from "./History";
+
 // 競走馬の型定義
 export interface Horse {
     id: string;          // 馬ID
@@ -8,4 +10,5 @@ export interface Horse {
     grandfather: string;     // 母父馬名
     title: string;
     detailUrl: string;   // Netkeibaの馬のURL
+    historys: History[]  // 戦歴
 }
