@@ -11,7 +11,14 @@ export const HistoryDialog = ({ open, onClose, histories }: Props) => {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20">
+    <div
+      className="fixed inset-0 flex items-center justify-center z-50"
+      style={{
+        backgroundColor: 'rgba(255, 255, 255, 0.6)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
+      }}
+    >
       {/* モーダル本体 */}
       <div className="bg-white/95 backdrop-blur-lg rounded-xl shadow-2xl w-full max-w-4xl mx-4 border border-slate-100">
         {/* メインコンテンツ */}
