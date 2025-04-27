@@ -13,10 +13,9 @@ export default function HorseList({ horses }: Props) {
   const [isOpenHistoryDialog, setIsOpenHistoryDialog] = useState(false);
   const [targetHistory, SetTargetHistories] = useState<History[]>([]);
 
-  const handleSetIsOpenHistoryDialog = (horseId:string, value:boolean) =>{
+  const handleSetIsOpenHistoryDialog = (histories:History[], value:boolean) =>{
       if(value){
-        const targetHistories = horses.find(x => x.id = horseId)?.historys;
-        SetTargetHistories(targetHistories != null ? targetHistories : []);
+        SetTargetHistories(histories);
       }else{
         SetTargetHistories([]);
       }
@@ -46,7 +45,7 @@ export default function HorseList({ horses }: Props) {
           className="bg-white rounded-lg shadow-md p-4 flex flex-col items-center"
         >
           <a
-            onClick={() => handleSetIsOpenHistoryDialog(horse.id, true)}
+            onClick={() => handleSetIsOpenHistoryDialog(horse.historys, true)}
             target="_blank"
             rel="noopener noreferrer"
             className="block w-full max-w-xs aspect-[4/3] relative group"
@@ -77,7 +76,7 @@ export default function HorseList({ horses }: Props) {
       ))}
       <HistoryDialog
         open={isOpenHistoryDialog}
-        onClose={() => {handleSetIsOpenHistoryDialog("", false)}}
+        onClose={() => {handleSetIsOpenHistoryDialog([], false)}}
         histories={targetHistory}/>
     </div>
   );
