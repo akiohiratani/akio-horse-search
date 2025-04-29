@@ -11,74 +11,69 @@ export const HistoryDialog = ({ open, onClose, histories }: Props) => {
   if (!open) return null;
 
   return (
-    <div
-      className="fixed inset-0 flex items-center justify-center z-50"
-      style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.6)',
-        backdropFilter: 'blur(8px)',
-        WebkitBackdropFilter: 'blur(8px)',
-      }}
-    >
-      {/* モーダル本体 */}
-      <div className="bg-white/95 backdrop-blur-lg rounded-xl shadow-2xl w-full max-w-4xl mx-4 border border-slate-100">
-        {/* メインコンテンツ */}
-        <div className="overflow-x-auto max-h-[60vh]">
-          <table className="w-full text-sm">
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-white/70 backdrop-blur-sm">
+      <div className="bg-white rounded-xl shadow-lg w-[95vw] max-h-screen p-4 flex flex-col">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-lg font-semibold text-gray-800">過去の戦績</h2>
+          <button
+            className="text-gray-400 hover:text-gray-600 transition"
+            onClick={onClose}
+            aria-label="閉じる"
+          >
+            ×
+          </button>
+        </div>
+        <div className="overflow-y-auto max-h-[70vh]">
+          <table className="min-w-full table-auto border-separate border-spacing-0">
+            <thead className="sticky top-0 z-10">
+              <tr>
+                <th className="bg-gray-100 text-gray-700 font-semibold px-4 py-2 border-b text-xs text-left w-[15%]">日付・開催・天候</th>
+                <th className="bg-gray-100 text-gray-700 font-semibold px-4 py-2 border-b text-xs text-left w-[25%]">レース名・距離・馬場</th>
+                <th className="bg-gray-100 text-gray-700 font-semibold px-4 py-2 border-b text-xs text-center w-[10%]">着順</th>
+                <th className="bg-gray-100 text-gray-700 font-semibold px-4 py-2 border-b text-xs text-left w-[20%]">騎手・斤量</th>
+                <th className="bg-gray-100 text-gray-700 font-semibold px-4 py-2 border-b text-xs text-left w-[30%]">詳細情報</th>
+              </tr>
+            </thead>
             <tbody>
               {histories.length === 0 ? (
                 <tr>
-                  <td colSpan={13} className="text-center p-6 text-slate-400">
+                  <td colSpan={5} className="text-center text-gray-400 py-8">
                     戦歴データがありません
                   </td>
                 </tr>
               ) : (
-                histories.map((h, idx) => (
+                histories.map((h, i) => (
                   <tr
-                    key={idx}
-                    className="hover:bg-slate-50/80 transition even:bg-slate-50/30 border-b border-slate-100"
+                    key={h.race_name}
+                    className={
+                      i % 2 === 0
+                        ? "bg-white hover:bg-blue-50"
+                        : "bg-gray-50 hover:bg-blue-50"
+                    }
                   >
-                    {/* 優先項目 */}
-                    <td className="p-3 whitespace-nowrap">
-                      <div className="font-medium text-slate-800">{h.date}</div>
-                      <div className="text-xs text-slate-500 mt-1">
-                        <span className="bg-slate-100/80 px-2 py-1 rounded-full">
-                          {h.venue}
-                        </span>
-                        <span className="ml-2">{h.weather}</span>
-                      </div>
+                    {/* 日付・開催・天候 */}
+                    <td className="px-4 py-2 text-sm text-gray-800 whitespace-pre-line leading-5">
+                      {`${h.date}\n${h.venue}\n${h.weather}`}
                     </td>
-
-                    <td className="p-3">
-                      <div className="font-semibold text-slate-900">
-                        {h.race_name}
-                      </div>
-                      <div className="text-xs text-slate-500 mt-1">
-                        <span className="bg-blue-100/50 text-blue-800 px-2 py-1 rounded-full">
-                          {h.distance}
-                        </span>
-                        <span className="ml-2">{h.track_condition}</span>
-                      </div>
+                    {/* レース名・距離・馬場 */}
+                    <td className="px-4 py-2 text-sm whitespace-pre-line leading-5">
+                      <span className="font-bold text-indigo-700">{h.race_name}</span>
+                      {"\n"}
+                      <span className="text-indigo-600">{`${h.distance}・${h.track_condition}`}</span>
                     </td>
-
-                    {/* 数値データ */}
-                    <td className="p-3 text-right">
-                      <span className="inline-block w-8 font-mono text-blue-600">
-                        {h.finish_position}
-                      </span>
+                    {/* 着順 */}
+                    <td className="px-4 py-2 text-lg text-center font-extrabold text-red-600 drop-shadow-sm">
+                      {h.finish_position}
                     </td>
-
-                    <td className="p-3">
-                      <div className="text-slate-800">{h.jockey}</div>
-                      <div className="text-xs text-slate-500">
-                        斤量 {h.weight}
-                      </div>
+                    {/* 騎手・斤量 */}
+                    <td className="px-4 py-2 text-sm whitespace-pre-line leading-5">
+                      <span className="font-semibold text-blue-700">{h.jockey}</span>
+                      {"\n"}
+                      <span className="text-blue-500">{`斤量 ${h.weight}`}</span>
                     </td>
-
-                    <td className="p-3 text-right space-x-2">
-                      <span className="inline-block w-12 text-slate-700">{h.margin}</span>
-                      <span className="inline-block w-12 text-emerald-600">{h.pace}</span>
-                      <span className="inline-block w-12 text-slate-700">{h.horse_weight}</span>
-                      <span className="inline-block w-12 text-rose-600">{h.rise}</span>
+                    {/* 詳細情報 */}
+                    <td className="px-4 py-2 text-sm text-gray-600 whitespace-pre-line">
+                      {`着差: ${h.margin}\nペース: ${h.pace}\n馬体重: ${h.horse_weight}\n上り: ${h.rise}`}
                     </td>
                   </tr>
                 ))
@@ -86,17 +81,7 @@ export const HistoryDialog = ({ open, onClose, histories }: Props) => {
             </tbody>
           </table>
         </div>
-
-        {/* フッター */}
-        <div className="flex justify-end p-4 border-t border-slate-100">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition shadow-lg shadow-blue-100"
-          >
-            閉じる
-          </button>
-        </div>
       </div>
     </div>
   );
-}
+};
