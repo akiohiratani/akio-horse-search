@@ -1,29 +1,57 @@
 import React from "react";
-import { History } from "@/app/domain/models/History";
+import { Horse } from "@/app/domain/models/Horse";
 
 type Props = {
   open: boolean;
   onClose: () => void;
-  histories: History[];
+  horse: Horse;
 };
 
-export const HistoryDialog = ({ open, onClose, histories }: Props) => {
+export const HistoryDialog = ({ open, onClose, horse }: Props) => {
   if (!open) return null;
+
+  const histories = horse.historys ?? [];
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-white/70 backdrop-blur-sm">
       <div className="bg-white rounded-xl shadow-lg w-[95vw] max-h-screen p-4 flex flex-col">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold text-gray-800">過去の戦績</h2>
+        {/* ヘッダー部 */}
+        <div className="flex items-center justify-between mb-4">
+          {/* 馬の情報 */}
+          <div className="flex items-center space-x-4">
+            <a
+              href={horse.detailUrl}
+              target="_blank"
+              rel="noopener noreferrer">
+            <div>
+              <div className="flex items-center space-x-2">
+                <span>{horse.name}</span>
+                <span className="text-sm text-white bg-blue-400 rounded px-2 py-0.5">{horse.sex}</span>
+              </div>
+              <div className="text-xs text-gray-500 mt-1">
+                <span>父: {horse.father}</span>
+                <span className="mx-2">|</span>
+                <span>母父: {horse.grandfather}</span>
+              </div>
+            </div>
+            </a>
+          </div>
+          {/* 閉じるボタン */}
           <button
-            className="text-gray-400 hover:text-gray-600 transition"
+            className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-300 bg-gray-100 text-gray-500 hover:text-red-500 hover:border-red-300 hover:bg-red-50 transition focus:outline-none focus:ring-2 focus:ring-red-200"
             onClick={onClose}
             aria-label="閉じる"
+            tabIndex={0}
           >
-            ×
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <title>閉じる</title>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </button>
         </div>
-        <div className="overflow-y-auto max-h-[70vh]">
+
+        {/* テーブル本体 */}
+        <div className="overflow-y-auto max-h-[70vh] relative">
           <table className="min-w-full table-auto border-separate border-spacing-0">
             <thead className="sticky top-0 z-10">
               <tr>
@@ -79,6 +107,16 @@ export const HistoryDialog = ({ open, onClose, histories }: Props) => {
                 ))
               )}
             </tbody>
+            {/* 固定フッター */}
+            <tfoot className="sticky bottom-0 z-10">
+              <tr>
+                <td colSpan={5} className="bg-gray-50 px-4 py-2 border-t">
+                  <div className="flex justify-between text-xs text-gray-500">
+                    <span>単位: 距離(m) / 斤量(kg)</span>
+                  </div>
+                </td>
+              </tr>
+            </tfoot>
           </table>
         </div>
       </div>
